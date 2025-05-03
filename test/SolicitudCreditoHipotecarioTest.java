@@ -2,32 +2,32 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.jupiter.api.*;
 
+import tp6.banco.Banco;
+import tp6.cliente.*;
+import tp6.solicitudCredito.*;
+
+
 public class SolicitudCreditoHipotecarioTest {
-	
-	Banco banco;
-	BancoInternos bi;
+
 	Cliente cliente;
-	ClienteManager cm;
 	
 	SolicitudCredito creditoHipoteca;
 	Propiedad propi;
+	
+	Banco banco = new Banco("BankGold");
 	
 	@Nested
 	class Aceptado {
 		@BeforeEach
 		public void setUp() {
-			banco = new Banco();
-			bi = new BancoInternos();
-			cliente = new Cliente();
-			cm = new ClienteManager();
-			
-			propi = new Propiedad("Calle Falsa 123", 10000);
-			creditoHipoteca = new SolicitudCreditoHipotecario(cliente,1500000, 20, propi);
+			cliente = new Cliente("Pepe", 22, 4000, banco);
+			propi = new Propiedad("Calle Falsa 123", 100000);
+			creditoHipoteca = new SolicitudCreditoHipotecario(cliente,15000, 8, propi);
 		}
 		
 		@Test
 		public void getMontoCuotaMensualAceptada() { // credito aceptado
-			assertEquals(75000, creditoHipoteca.getMontoCuotaMensual());
+			assertEquals(1875d, creditoHipoteca.getMontoCuotaMensual(), 0.1);
 		}
 		
 		
@@ -37,36 +37,36 @@ public class SolicitudCreditoHipotecarioTest {
 		}
 	}
 	
-	@Nestes
+	@Nested 
 	class Rechazado{
 		@BeforeEach
 		public void setUp() {
-			banco = new Banco();
-			bi = new BancoInternos();
-			cm = new ClienteManager();
 		}
 		
+		@Test
 		public void esRechazadoEdadTest() {
-			cliente = new Cliente();	
-			propi = new Propiedad("Calle Falsa 123", 10000);
-			creditoHipoteca = new SolicitudCreditoHipotecario(cliente,1500000, 20, propi);
+			cliente = new Cliente("Jaun Salvo", 66, 4000, banco);	
+			propi = new Propiedad("Calle Falsa 123", 100000);
+			creditoHipoteca = new SolicitudCreditoHipotecario(cliente,15000, 8, propi);
 			
 			assertEquals(false, creditoHipoteca.esAceptable());
 			
 		}
 		
+		@Test
 		public void esRechazadoValorPropiedadTest() {
-			cliente = new Cliente();	
+			cliente = new Cliente("Jaun Salvo", 45, 4000, banco);	
 			propi = new Propiedad("Calle Falsa 123", 10000);
-			creditoHipoteca = new SolicitudCreditoHipotecario(cliente,1500000, 20, propi);
+			creditoHipoteca = new SolicitudCreditoHipotecario(cliente,15000, 8, propi);
 			
 			assertEquals(false, creditoHipoteca.esAceptable());
 		}
 		
+		@Test
 		public void esRechazadoMontoCuotaParteTest() {
-			cliente = new Cliente();	
-			propi = new Propiedad("Calle Falsa 123", 10000);
-			creditoHipoteca = new SolicitudCreditoHipotecario(cliente,1500000, 20, propi);
+			cliente = new Cliente("Jaun Salvo", 45, 4000, banco);	
+			propi = new Propiedad("Calle Falsa 123", 100000);
+			creditoHipoteca = new SolicitudCreditoHipotecario(cliente,15000, 3, propi);
 			
 			assertEquals(false, creditoHipoteca.esAceptable());
 		}

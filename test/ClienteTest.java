@@ -1,36 +1,41 @@
+import static org.junit.Assert.assertEquals;
+
 import org.junit.jupiter.api.*;
+
+import tp6.banco.*;
+import tp6.cliente.*;
+import tp6.solicitudCredito.*;
 
 
 public class ClienteTest {
 	
 	Cliente cliente;
-	ClienteManager cm;
 	
-	SolicitudCredito creditoPersona;
+	SolicitudCredito creditoPersonal;
 	
 	Banco banco;
 	BancoInternos bi;
 	
 	@BeforeEach
 	public void setUp() {
-		cm = new ClienteManager;
-		cliente = new Cliente("Pedro", "Perez", "AAA 111", "20", "50000", cm);
-		creditoPersonal = new SolicitudCreditoPersonal();
+		banco = new Banco("Pepe´s Bank");
 		
-		banco = new Banco();;
+		cliente = new Cliente("Pepe", 46, 2000d, banco);
+		creditoPersonal = new SolicitudCreditoPersonal(cliente,22000, 20);
+		
 		bi = new BancoInternos();
 	}
 	
 	@Test
 	public void solicitarCreditoTest() {
 		//el credito es aceptado
-		cliente.solicitarCredito();
-		assertEquals(bi.creditosAceptados().getFirst(), creditoPersonal);
+		cliente.solicitarCredito(creditoPersonal);
+		assertEquals(bi.creditosAceptados(banco.getCreditos()).getFirst(), creditoPersonal);
 		
 	}
 	@Test
 	public void sueldoNetoAnual() {
-		assertEquals(600000, cliente.sueldoNetoAnual());
+		assertEquals(24000d, cliente.getSueldoNetoAnual(), 0.1);
 	}
 	
 }

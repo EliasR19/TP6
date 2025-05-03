@@ -4,32 +4,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import tp6.banco.Banco;
+import tp6.cliente.*;
+import tp6.solicitudCredito.*;
 public class SolicitudCreditoPersonalTest {
 	
-	
-	Banco banco;
-	BancoInternos bi;
+
 	Cliente cliente;
-	ClienteManager cm;
+
 	
 	SolicitudCredito creditoPersonal;
 	Propiedad propi;
 	
-	@Nested
+	Banco banco = new Banco("Pepe´s Bank");
+	
+	@Nested 
 	class Aceptado {
 		@BeforeEach
 		public void setUp() {
-			banco = new Banco();
-			bi = new BancoInternos();
-			cliente = new Cliente();
-			cm = new ClienteManager();
-			
-			creditoPersonal = new SolicitudCreditoPersonal(cliente,1500000, 20);
+
+			cliente = new Cliente("Pepe", 46, 2000d, banco);
+
+			creditoPersonal = new SolicitudCreditoPersonal(cliente,22000, 20);
 		}
 		
 		@Test
 		public void getMontoCuotaMensualAceptada() { // credito aceptado
-			assertEquals(75000, creditoPersonal.getMontoCuotaMensual());
+			assertEquals(1100d, creditoPersonal.getMontoCuotaMensual(), 0.1);
 		}
 		
 		
@@ -39,23 +40,23 @@ public class SolicitudCreditoPersonalTest {
 		}
 	}
 	
-	@Nestes
+	@Nested
 	class Rechazado{
 		@BeforeEach
 		public void setUp() {
-			banco = new Banco();
-			bi = new BancoInternos();
-			cm = new ClienteManager();
 		}
 		
-		
+		@Test
 		public void esRechazadoIngresoAnualTest() {
-			cliente = new Cliente();	
+			cliente = new Cliente("Alicia", 32, 2000, banco);
+			creditoPersonal = new SolicitudCreditoPersonal(cliente, 50000, 7);
 			assertEquals(false, creditoPersonal.esAceptable());
 		}
 		
+		@Test 
 		public void esRechazadoIngresosMensualesTest() {
-			cliente = new Cliente();	
+			cliente = new Cliente("Alicia", 32, 1000, banco);	
+			creditoPersonal = new SolicitudCreditoPersonal(cliente, 5000, 7);
 			assertEquals(false, creditoPersonal.esAceptable());
 		}
 		
