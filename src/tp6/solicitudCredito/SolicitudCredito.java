@@ -29,6 +29,7 @@ public abstract class SolicitudCredito {
 	}
 
 
+//hacerlo para que lo vea solo el package
 	public  boolean esMontoCuotaParteMenorIngresoMensual(int porcentaje) {
 		double porcentajeClienteSueldoMensual = (cliente.getSueldoNetoMensual() * porcentaje ) / 100;
 		return this.getMontoCuotaMensual() < porcentajeClienteSueldoMensual;
